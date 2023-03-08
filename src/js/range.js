@@ -1,11 +1,16 @@
 class Range {
-    ID = { wrapper: "range", text: "length" };
+    ID = {
+        wrapper: "range",
+        track1: "track1",
+        track2: "track2",
+        text: "length",
+    };
     PRICES = [1.12e5, 1.72e6, 99e3];
 
     constructor(minLen, maxLen, step) {
         this.wrapper = document.getElementById(this.ID.wrapper);
-        this.track1 = this.wrapper.childNodes[1];
-        this.track2 = this.wrapper.childNodes[5];
+        this.track1 = document.getElementById(this.ID.track1);
+        this.track2 = document.getElementById(this.ID.track2);
         this.text = document.getElementById(this.ID.text);
 
         this.checkpoints = [];
@@ -20,39 +25,25 @@ class Range {
         this.rect = this.getCoords();
         this.tid = 0;
 
-        // ["ontouchstart", "onmousedown"].forEach((e) => {
-        //     this.wrapper[e] = function () {
-        //         if (!this.tid)
-        //             this.tid = setInterval(() => this.thumbs.call(this), 100);
-        //         return false;
-        //     }.bind(this);
-        // });
+        ["ontouchstart", "onmousedown"].forEach((e) => {
+            this.wrapper[e] = function () {
+                if (!this.tid)
+                    this.tid = setInterval(() => this.thumbs.call(this), 100);
+                return false;
+            }.bind(this);
+        });
 
-        this.wrapper.onmousedown = function () {
-            if (!this.tid)
-                this.tid = setInterval(() => this.thumbs.call(this), 100);
-            return false;
-        }.bind(this);
-
-        window.addEventListener(
-            "mouseup",
-            function () {
-                if (this.tid) {
-                    clearInterval(this.tid);
-                    this.tid = 0;
-                }
-            }.bind(this)
-        );
-
-        // window.addEventListener(
-        //     "touchend",
-        //     function () {
-        //         if (this.tid) {
-        //             clearInterval(this.tid);
-        //             this.tid = 0;
-        //         }
-        //     }.bind(this)
-        // );
+        ["mouseup", "touchend"].forEach((e) => {
+            window.addEventListener(
+                e,
+                function () {
+                    if (this.tid) {
+                        clearInterval(this.tid);
+                        this.tid = 0;
+                    }
+                }.bind(this)
+            );
+        });
 
         window.addEventListener(
             "mousemove",
@@ -62,13 +53,13 @@ class Range {
             }.bind(this)
         );
 
-        // window.addEventListener(
-        //     "touchmove",
-        //     function (e) {
-        //         this.mouse.X = e.touches[0].pageX;
-        //         this.mouse.Y = e.touches[0].pageY;
-        //     }.bind(this)
-        // );
+        window.addEventListener(
+            "touchmove",
+            function (e) {
+                this.mouse.X = e.touches[0].pageX;
+                this.mouse.Y = e.touches[0].pageY;
+            }.bind(this)
+        );
 
         window.addEventListener(
             "resize",
