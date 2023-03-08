@@ -20,13 +20,19 @@ class Range {
         this.rect = this.getCoords();
         this.tid = 0;
 
-        ["ontouchstart", "onmousedown"].forEach((e) => {
-            this.wrapper[e] = function () {
-                if (!this.tid)
-                    this.tid = setInterval(() => this.thumbs.call(this), 100);
-                return false;
-            }.bind(this);
-        });
+        // ["ontouchstart", "onmousedown"].forEach((e) => {
+        //     this.wrapper[e] = function () {
+        //         if (!this.tid)
+        //             this.tid = setInterval(() => this.thumbs.call(this), 100);
+        //         return false;
+        //     }.bind(this);
+        // });
+
+        this.wrapper.onmousedown = function () {
+            if (!this.tid)
+                this.tid = setInterval(() => this.thumbs.call(this), 100);
+            return false;
+        }.bind(this);
 
         window.addEventListener(
             "mouseup",
@@ -38,15 +44,15 @@ class Range {
             }.bind(this)
         );
 
-        window.addEventListener(
-            "touchend",
-            function () {
-                if (this.tid) {
-                    clearInterval(this.tid);
-                    this.tid = 0;
-                }
-            }.bind(this)
-        );
+        // window.addEventListener(
+        //     "touchend",
+        //     function () {
+        //         if (this.tid) {
+        //             clearInterval(this.tid);
+        //             this.tid = 0;
+        //         }
+        //     }.bind(this)
+        // );
 
         window.addEventListener(
             "mousemove",
@@ -56,13 +62,13 @@ class Range {
             }.bind(this)
         );
 
-        window.addEventListener(
-            "touchmove",
-            function (e) {
-                this.mouse.X = e.touches[0].pageX;
-                this.mouse.Y = e.touches[0].pageY;
-            }.bind(this)
-        );
+        // window.addEventListener(
+        //     "touchmove",
+        //     function (e) {
+        //         this.mouse.X = e.touches[0].pageX;
+        //         this.mouse.Y = e.touches[0].pageY;
+        //     }.bind(this)
+        // );
 
         window.addEventListener(
             "resize",
