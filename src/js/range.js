@@ -20,14 +20,26 @@ class Range {
         this.rect = this.getCoords();
         this.tid = 0;
 
-        this.wrapper.onmousedown = function () {
-            if (!this.tid)
-                this.tid = setInterval(() => this.thumbs.call(this), 100);
-            return false;
-        }.bind(this);
+        ["ontouchstart", "onmousedown"].forEach((e) => {
+            this.wrapper[e] = function () {
+                if (!this.tid)
+                    this.tid = setInterval(() => this.thumbs.call(this), 100);
+                return false;
+            }.bind(this);
+        });
 
         window.addEventListener(
             "mouseup",
+            function () {
+                if (this.tid) {
+                    clearInterval(this.tid);
+                    this.tid = 0;
+                }
+            }.bind(this)
+        );
+
+        window.addEventListener(
+            "touchend",
             function () {
                 if (this.tid) {
                     clearInterval(this.tid);
@@ -41,6 +53,14 @@ class Range {
             function (e) {
                 this.mouse.X = e.pageX;
                 this.mouse.Y = e.pageY;
+            }.bind(this)
+        );
+
+        window.addEventListener(
+            "touchmove",
+            function (e) {
+                this.mouse.X = e.touches[0].pageX;
+                this.mouse.Y = e.touches[0].pageY;
             }.bind(this)
         );
 

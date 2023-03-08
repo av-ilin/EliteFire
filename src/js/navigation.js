@@ -11,7 +11,6 @@ const menu = document.getElementsByClassName("menu")[0];
 const body = document.getElementsByTagName("body")[0];
 
 let baseNavPaddingTop = +getComputedStyle(navigation).paddingTop.split("px")[0];
-console.log(baseNavPaddingTop);
 window.addEventListener("scroll", function () {
     navigation.style.paddingTop = `${Math.max(
         0,
